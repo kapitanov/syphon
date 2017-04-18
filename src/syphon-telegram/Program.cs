@@ -24,7 +24,14 @@ namespace syphon_telegram
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.LiterateConsole()
                 .CreateLogger();
-            Bot = new TelegramBotClient(Environment.GetEnvironmentVariable("SYPHON_TELEGRAM_TOKEN"));
+            var token = Environment.GetEnvironmentVariable("SYPHON_TELEGRAM_TOKEN");
+            if(string.IsNullOrEmpty(token)) 
+            {
+                Log.Fatal("Variable {Var} is not set", "SYPHON_TELEGRAM_TOKEN");
+                Environment.Exit(-1);
+                return;
+            }
+            Bot = new TelegramBotClient(token);
 
             Bot.OnCallbackQuery += OnCallbackQuery;
             Bot.OnMessage += OnMessage;
