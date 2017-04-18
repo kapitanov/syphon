@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard1.6</TargetFramework>
+    <RootNamespace>Syphon</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="serilog" Version="2.4.0" />
+    <PackageReference Include="System.Threading.Tasks.Parallel" Version="4.3.0" />
+    <PackageReference Include="system.valuetuple" Version="4.3.0" />
+    <PackageReference Include="Telegram.Bot" Version="12.0.0-beta-02" />
+  </ItemGroup>
+
+
+</Project>

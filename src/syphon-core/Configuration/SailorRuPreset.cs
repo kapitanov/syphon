@@ -1,0 +1,966 @@
+﻿using Syphon.Parsing;
+using Syphon.Processing;
+    
+namespace Syphon.Configuration
+{
+    internal sealed class SailorRuPreset : IPreset
+    {
+        public string Id => "sailor-ru";
+
+        public string Name => "Моряк Петрович";
+
+        public string[] Boundaries { get; } = new[]
+        {
+            " ", 
+            "\n    ", 
+            ".", 
+            ",", 
+            "-", 
+            "—", 
+            ":", 
+            "!", 
+            "?", 
+        };
+
+        public IParser[] Parsers { get; } = new IParser[]
+        {
+            new Punctuation(new string[] {
+            }),
+            new Verb(new string[] {
+                "(?<end>(ил|ал|ась|ала|ало|али)\\b)", 
+                "(?<end>(ат|или|ут|ыл|ыло|ыли|ыла)\\b)", 
+                "(?<end>(ать|ить|еть|аться|еться|иться|ул|ил|ал|ула|ала|ила|улся|ился|ался|илась|алась|иться|улась|ило|ало|уло|илось|алось|улось)\\b)", 
+            }),
+            new Noun(new string[] {
+                "(?<end>(ант|ин|ец|да|ер|ка|ок|зь|акт|ис|ор|ик|та|ул|он|ид|ри|уй|инг)\\b)", 
+                "(?<end>(ма|чи|ча|че|чь|ну|ын|ына|ыни|ыно|от|ня|ди|ги|ра)\\b)", 
+            }),
+            new Adjective(new string[] {
+                "[^\\b](?<end>(ый|ий|ай|ое|ие|ого|его|их|им|ом|ой|ых|ую|ая|уя)\\b)", 
+                "[^\\b](?<end>(ый|ий|ай|ей|ой|ее|его|ого|им|ая|ия|ыя|оя|ому|ыми|ими|ым)\\b)", 
+                "[^\\b](?<end>(его|ые|ии|ие)\\b)", 
+            }),
+            new Preposition(new string[] {
+                "(?<end>\\b(и|в|на|от|под|за|как|что|со|или|у|но|из|за|под|к|для|до|после|без|можно|же|по|)\\b)", 
+            }),
+        };
+
+
+        public IRule[] Rules { get; } = new IRule[]
+        {
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Adjective,
+                Propability = 64,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "* ебан~",
+                    "* морск~",
+                    "* как штурвал ",
+                    "*, что мой киль, ",
+                    "* словно чайка в жопе ",
+                    "* как говно чайки ",
+                    "* сияющ~ как начищенный хуй старого морского волка ",
+                    "* огромн~ как мои морские яйцы ",
+                    "* будто чайка в жопе ",
+                    "*, ссучен~ с морскими хуями ",
+                    "* ссан~",
+                    "*-ссан~",
+                    "* пидорск~",
+                    "*-пидорск~",
+                    "* блядск~",
+                    "*-блядск~",
+                    "* жопн~",
+                    "*-жопн~",
+                    "* хуев~",
+                    "*-хуев~",
+                    "* штормов~",
+                    "*-штормов~",
+                },
+                SpecificWords = new string[] {
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Whitespace,
+                Propability = 128,
+                IgnoreWhitespaces = true,
+                KillPreviousWhitespace = true,
+                RequiresAi = false,
+                Templates = new string[] {
+                    ", блядь, ",
+                    ", нахуй, ",
+                    ", морское говно с глазами, ",
+                    ", парус тебе в рот, ",
+                    ", вот пиздец, ",
+                    ", ебаный в рот, ",
+                    ", хули, ",
+                    ", ебаный папуас, ",
+                    ", бля, ",
+                    ", сучий парус, ",
+                    ", морская блядина, ",
+                    ", ебаный внук морской рыбы-хуй, ",
+                    ", рыбий сын, ",
+                    ", папуасское отродье, ",
+                    ", ебать сто матросов, ",
+                    ", штурвал мне на хуй, *",
+                    ", хуй тебе на корму, ",
+                    ", пизду тебе на матчу, ",
+                    ", пидор, ",
+                    ", матрос ебучий, ",
+                    ", каракатица злоебанная, ",
+                    ", мастурбируя хуй старого морского волка, ",
+                    ", вот говно, ",
+                    ", пиздец, ",
+                    ", еб твою мать, ",
+                    ", надеть на хуй штурвал, ",
+                    ", говно с парусом, ",
+                    ", хуй тебе в грот, ",
+                    ", пидорье отродье, ",
+                    ", чтоб тебе хуй оторвало, ",
+                    ", ебаться в рот, ",
+                    ", дрочить моему корабельному коту, ",
+                    ", посасывая хуй как леденец, ",
+                    ", но ведь это же пиздец, ",
+                    ", матросы, ",
+                    ", в рот мне пушку, ",
+                    ", ебать тебя в рот, ",
+                    ", хуй тебе на парус, ",
+                    ", штурвал тебе в жопу, ",
+                    ", парус тебе в сраку, ",
+                    ", сосать мой морской хуй, ",
+                    ", мастурбировать мне хуй, ",
+                    ", ебаный в рот, ",
+                    ", сука ебаная, ",
+                    ", надеть на хуй штурвал, ",
+                },
+                SpecificWords = new string[] {
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                    TokenType.Noun,
+                    TokenType.Verb,
+                    TokenType.Adjective,
+                },
+                NotAfter = new TokenType[] {
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "ни разу не",
+                    "вообще не",
+                    "вот пиздец, вообще не",
+                    "нихуя не",
+                    "даже не немного, а вообще нихуя не",
+                    ", бля, ну бля, ну вот совсем нихуя нисколечко не",
+                    "нихуя, ну вот совсем нихуя не",
+                },
+                SpecificWords = new string[] {
+                    "не",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "но, хули,",
+                    "но, блядь,",
+                    "но, бля,",
+                    "но, ебаный в рот,",
+                },
+                SpecificWords = new string[] {
+                    "но",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "в рот и в",
+                    "в говно и в",
+                    "в жопу и в",
+                    "в пизду и в",
+                    "в корму и в",
+                },
+                SpecificWords = new string[] {
+                    "в",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "с говном и с",
+                    "с хуями, с",
+                    ", сука, с",
+                },
+                SpecificWords = new string[] {
+                    "с",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "*, хули там,",
+                    "* прямо на хуй",
+                    "*, с какого-то хуя,",
+                    "* с хуями",
+                    "*, хули же,",
+                    "*, пиздец,",
+                },
+                SpecificWords = new string[] {
+                    "а",
+                    "и",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "из жопы и",
+                    "из говна и",
+                },
+                SpecificWords = new string[] {
+                    "из",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "как парусом в жопу",
+                    "как штурвалом в жопу",
+                    "как говном в ухо",
+                },
+                SpecificWords = new string[] {
+                    "как",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "что, говнючее хуйло,",
+                    "что, пидорасы сучьи,",
+                },
+                SpecificWords = new string[] {
+                    "что",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Preposition,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "нахуй на",
+                    "на, ебань тупой,",
+                    "на, ни хуя себе,",
+                    "на, морской еблан,",
+                    "на, хули же,",
+                },
+                SpecificWords = new string[] {
+                    "на",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Noun,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "*, пидар~, ",
+                    "*-пидарас~",
+                    "*, гомосек~, ",
+                    "* и гомосек~",
+                    "*-пидор~",
+                },
+                SpecificWords = new string[] {
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Verb,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "*, словно трах~ грязные морские жопы,",
+                    "*-дроч~",
+                    "*-еб~",
+                    "*-пизд~",
+                    "*-жоп~",
+                    "* и еб~",
+                    "*, а также жоп~",
+                    "*, и пизд~",
+                    "*, а также дроч~",
+                    "*, и тем более еб~",
+                },
+                SpecificWords = new string[] {
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Dot,
+                Propability = 64,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    ", это тебе не хуй дрочить!",
+                    ". Ебаный папуас!",
+                    ", просто охуеть!",
+                    ". Не нравится - плывите на хуй.",
+                    ". Иди-ка запихни себе в сраку штурвал и нацепи компас на яйцы, сука.",
+                    ". Пиздец морским хуям!",
+                    ". Пиздец котенку, пиздец цыпленку, пиздец машине боевой.",
+                    ", и пиздец.",
+                    ", так-то!",
+                    ", словом, заебись хуйня получилась!",
+                    ", хотя вообще это всем похуй.",
+                    ", хули ж.",
+                    ", но ведь это же всем похую.",
+                    ", да и насрать.",
+                    ". А вот тут какой-то пидор насрал!",
+                    ". Развелось тут пидарасов, блядь!",
+                },
+                SpecificWords = new string[] {
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Question,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "? Я вот не ебу!",
+                    "? Я вот вообще не ебу!",
+                    "? Вот тебе задачка, хуй разгадаешь!",
+                    "? Я вот хуй его знает...",
+                    "? Да хуй его знает!",
+                    "? Я вот не знаю, да мне и похуй.",
+                    "? Что это за хуйня?",
+                    "? С какого это же хуя?",
+                    "? Это с какого еще хуя?",
+                    "? Что это такое, пиздец какой-то!",
+                    "? Я просто хуею!",
+                    "? С  хуев ли?",
+                },
+                SpecificWords = new string[] {
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Exclamation,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "! Просто заебись!",
+                    "! И вообще, идите вы все на хуй!",
+                    "! Охуеть!",
+                    "! Это просто охуительный пиздец, дорогие мои!",
+                    "! Это же просто какой-то штормовой пиздец!",
+                    "! Совсем  охуели, пидарасы!",
+                    "! Пиздец!",
+                    "! Ебаный в рот!",
+                },
+                SpecificWords = new string[] {
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Dash,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    "* Еб твою мать! *",
+                    "* Ебать твой анус! *",
+                },
+                SpecificWords = new string[] {
+                    "—",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Dot,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    ". Мда...",
+                    ". Пиздец...",
+                    ". Хуево...",
+                    ". Вот, бля, пиздец то какой наступил...",
+                },
+                SpecificWords = new string[] {
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                    TokenType.Dot,
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+            new DefaultRule(new RuleDefinition
+            {
+                AcceptType = TokenType.Unknown,
+                Propability = 128,
+                IgnoreWhitespaces = false,
+                KillPreviousWhitespace = false,
+                RequiresAi = false,
+                Templates = new string[] {
+                    ", зырь, пидарюга:",
+                    ", вот те:",
+                    ", на, подавись хуем:",
+                },
+                SpecificWords = new string[] {
+                    ":",
+                },
+                Before = new TokenType[] {
+                },
+                NotBefore = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Dot,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Question,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+                After = new TokenType[] {
+                    TokenType.Whitespace,
+                },
+                NotAfter = new TokenType[] {
+                    TokenType.Comma,
+                    TokenType.Quote,
+                    TokenType.Colon,
+                    TokenType.Exclamation,
+                    TokenType.Dash,
+                    TokenType.OpeningBrace,
+                    TokenType.ClosingBrace,
+                },
+            }),
+        };
+
+
+        public IWordBuilder WordBuilder { get; } = new WordBuilder(
+            new string[]
+            {
+                "пидор",
+                "муд",
+                "хуе",
+                "манд",
+                "уеб",
+                "зл",
+                "пизд",
+                "говн",
+                "перд",
+                "ослоеб",
+                "говноеб",
+                "еб",
+                "жоп",
+                "выеб",
+            },
+            new (string, Cases)[]
+            {
+                ("ас", Cases.Nominative),
+                ("ан", Cases.Nominative),
+                ("ос", Cases.Nominative),
+                ("охуй", Cases.Nominative),
+                ("аса", Cases.Genitive),
+                ("ана", Cases.Genitive),
+                ("оса", Cases.Genitive),
+                ("охуя", Cases.Genitive),
+                ("асу", Cases.Dative),
+                ("ану", Cases.Dative),
+                ("осу", Cases.Dative),
+                ("охую", Cases.Dative),
+                ("аса", Cases.Accusative),
+                ("ана", Cases.Accusative),
+                ("оса", Cases.Accusative),
+                ("охуя", Cases.Accusative),
+                ("асом", Cases.Ablative),
+                ("аном", Cases.Ablative),
+                ("осом", Cases.Ablative),
+                ("охуем", Cases.Ablative),
+                ("асе", Cases.Prepositional),
+                ("ане", Cases.Prepositional),
+                ("осе", Cases.Prepositional),
+                ("охуе", Cases.Prepositional),
+            });
+
+    }
+}
+    

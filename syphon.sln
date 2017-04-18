@@ -3,7 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "syphon-core", "syphon-core\syphon-core.csproj", "{E042C6C1-8702-4439-88EC-86FC1AFE8FC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "syphon-core", "src\syphon-core\syphon-core.csproj", "{D7A17D54-ACBB-4327-A67B-D57AB609217D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "syphon-term", "src\syphon-term\syphon-term.csproj", "{06AF5825-E789-4973-9075-7C0E0F452AEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "syphon-telegram", "src\syphon-telegram\syphon-telegram.csproj", "{7C208FD8-FF82-4903-85BA-DEF8201D076A}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AFD0D2D1-54E4-4261-B464-EF12C072FA64}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +17,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{E042C6C1-8702-4439-88EC-86FC1AFE8FC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E042C6C1-8702-4439-88EC-86FC1AFE8FC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E042C6C1-8702-4439-88EC-86FC1AFE8FC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E042C6C1-8702-4439-88EC-86FC1AFE8FC3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7A17D54-ACBB-4327-A67B-D57AB609217D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7A17D54-ACBB-4327-A67B-D57AB609217D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7A17D54-ACBB-4327-A67B-D57AB609217D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7A17D54-ACBB-4327-A67B-D57AB609217D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{06AF5825-E789-4973-9075-7C0E0F452AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{06AF5825-E789-4973-9075-7C0E0F452AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{06AF5825-E789-4973-9075-7C0E0F452AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{06AF5825-E789-4973-9075-7C0E0F452AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C208FD8-FF82-4903-85BA-DEF8201D076A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C208FD8-FF82-4903-85BA-DEF8201D076A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C208FD8-FF82-4903-85BA-DEF8201D076A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C208FD8-FF82-4903-85BA-DEF8201D076A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFD0D2D1-54E4-4261-B464-EF12C072FA64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFD0D2D1-54E4-4261-B464-EF12C072FA64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFD0D2D1-54E4-4261-B464-EF12C072FA64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFD0D2D1-54E4-4261-B464-EF12C072FA64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

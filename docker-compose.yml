@@ -1,0 +1,11 @@
+version: '2'
+
+services:
+  syphon-telegram:
+    image: syphon-telegram
+    container_name: syphon_telegram
+    build:
+      context: ./src/syphon-telegram
+      dockerfile: Dockerfile
+      env_file: .env
+    restart: always
