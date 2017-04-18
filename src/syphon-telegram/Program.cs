@@ -46,7 +46,10 @@ namespace syphon_telegram
             Console.Title = me.Username;
 
             Bot.StartReceiving();
-            Console.ReadLine();
+            while(true)
+            {
+                Console.ReadLine();
+            }
             Bot.StopReceiving();
         }
 
@@ -81,7 +84,7 @@ namespace syphon_telegram
             {
                 await Bot.SendTextMessageAsync(
                     e.Message.Chat.Id,
-                    "Привет, меня зовут Сифон и я ~алкоголик~ матершинник",
+                    "Привет, меня зовут Сифон и я ~алкоголик~ матершинник. Напиши мне что-нибудь, а я в ответ буду материться - это все, что мне под силу.",
                     ParseMode.Markdown);
                 Log.Information("Started new chat with {User}", e.Message.MessageId, e.Message.From.Username);
                 return;
