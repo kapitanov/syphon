@@ -1,6 +1,5 @@
 FROM microsoft/dotnet:1.1-sdk
 COPY . /app
-RUN dotnet restore
-RUN dotnet build
+RUN cd /app && dotnet restore && dotnet build
 WORKDIR /app/src/syphon-telegram
 ENTRYPOINT ["dotnet", "run"]

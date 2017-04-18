@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "syphon-term", "src\syphon-t
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "syphon-telegram", "src\syphon-telegram\syphon-telegram.csproj", "{7C208FD8-FF82-4903-85BA-DEF8201D076A}"
 EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{AFD0D2D1-54E4-4261-B464-EF12C072FA64}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,10 +27,6 @@ Global
 		{7C208FD8-FF82-4903-85BA-DEF8201D076A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7C208FD8-FF82-4903-85BA-DEF8201D076A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7C208FD8-FF82-4903-85BA-DEF8201D076A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AFD0D2D1-54E4-4261-B464-EF12C072FA64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AFD0D2D1-54E4-4261-B464-EF12C072FA64}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AFD0D2D1-54E4-4261-B464-EF12C072FA64}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AFD0D2D1-54E4-4261-B464-EF12C072FA64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
