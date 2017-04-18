@@ -7,5 +7,5 @@ services:
     build:
       context: ./src/syphon-telegram
       dockerfile: Dockerfile
-      env_file: .env
+    env_file: .env
     restart: always
