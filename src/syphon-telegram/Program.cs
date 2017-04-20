@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
-using System.Text.RegularExpressions;
 using Serilog;
 using Syphon;
 using Telegram.Bot;
 using Telegram.Bot.Args;
+using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineQueryResults;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace syphon_telegram
 {
@@ -16,16 +17,20 @@ namespace syphon_telegram
         private static TelegramBotClient Bot;
         private static SyphonEngine Engine;
 
+        private static readonly object LastMsgIdsLock = new object();
+        private static readonly Dictionary<string, int> LastMsgIds = new Dictionary<string, int>();
+
         public static void Main(string[] args)
         {
             Console.OutputEncoding = Encoding.UTF8;
-            Engine = new SyphonEngine(Preset.PetrovichRu, Level.L3, true);
+            Engine = new SyphonEngine(Preset.JointRu, Level.L3, true);
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.LiterateConsole()
                 .CreateLogger();
+            
             var token = Environment.GetEnvironmentVariable("SYPHON_TELEGRAM_TOKEN");
-            if(string.IsNullOrEmpty(token)) 
+            if (string.IsNullOrEmpty(token))
             {
                 Log.Fatal("Variable {Var} is not set", "SYPHON_TELEGRAM_TOKEN");
                 Environment.Exit(-1);
@@ -46,7 +51,7 @@ namespace syphon_telegram
             Console.Title = me.Username;
 
             Bot.StartReceiving();
-            while(true)
+            while (true)
             {
                 Console.ReadLine();
             }
@@ -79,48 +84,86 @@ namespace syphon_telegram
                 return;
             }
 
-            var inputText = e.Message.Text;
-            if (inputText == "/start")
+            try
             {
+                var response = Process(e.Message);
+                var m = await Bot.SendTextMessageAsync(
+                    e.Message.Chat.Id,
+                    response,
+                    ParseMode.Html,
+                    disableWebPagePreview: true);
+                lock (LastMsgIdsLock)
+                {
+                    LastMsgIds[m.Chat.Id] = m.MessageId;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Exception while repling to message #{MessageId} from {User} '{Text}'", e.Message.MessageId, e.Message.From.Username, e.Message.Text);
                 await Bot.SendTextMessageAsync(
                     e.Message.Chat.Id,
-                    "Привет, меня зовут Сифон и я ~алкоголик~ матершинник. Напиши мне что-нибудь, а я в ответ буду материться - это все, что мне под силу.",
-                    ParseMode.Markdown);
-                Log.Information("Started new chat with {User}", e.Message.MessageId, e.Message.From.Username);
-                return;
+                    $"Простите, что-то я обосрался ({ex.Message})",
+                    ParseMode.Html,
+                    disableWebPagePreview: true);
+
+                lock (LastMsgIdsLock)
+                {
+                    LastMsgIds.Remove(e.Message.Chat.Id);
+                }
             }
-
-            if (!Regex.IsMatch(inputText, @"^[а-яА-Я]+[а-яА-Я\s-_.,;]+.*$"))
-            {
-                await Bot.SendTextMessageAsync(e.Message.Chat.Id, "Скажи хоть что-нибудь");
-                Log.Warning("Nothing to reply to message #{MessageId} from {User} '{Text}'", e.Message.MessageId, e.Message.From.Username, e.Message.Text);
-                return;
-            }
-
-            var result = Engine.Process(inputText);
-
-            var renderer = new BotHtmlResultRenderer();
-            result.Render(renderer);
-            var outputText = renderer.Result;
-
-            if (string.IsNullOrWhiteSpace(outputText))
-            {
-                await Bot.SendTextMessageAsync(e.Message.Chat.Id, "Простите, что-то я обосрался");
-                Log.Warning("Failed to reply to message #{MessageId} from {User} '{Text}'", e.Message.MessageId, e.Message.From.Username, e.Message.Text);
-                return;
-            }
-
-            await Bot.SendTextMessageAsync(
-                e.Message.Chat.Id,
-                outputText,
-                ParseMode.Html,
-                disableWebPagePreview: true);
-            Log.Information("Replied to message #{MessageId} from {User} '{Text}'", e.Message.MessageId, e.Message.From.Username, e.Message.Text);
         }
 
         private static async void OnMessageEdited(object sender, MessageEventArgs e)
         {
-            await Bot.SendTextMessageAsync(e.Message.Chat.Id, "Don't even try to edit anything!");
+            try
+            {
+                var response = Process(e.Message);
+
+                int msgId;
+                lock (LastMsgIdsLock)
+                {
+                    LastMsgIds.TryGetValue(e.Message.Chat.Id, out msgId);
+                }
+
+                Message m;
+                if (msgId != 0)
+                {
+                    m = await Bot.EditMessageTextAsync(
+                        e.Message.Chat.Id,
+                        msgId,
+                        response,
+                        ParseMode.Html,
+                        disableWebPagePreview: true
+                    );
+                }
+                else
+                {
+                    m = await Bot.SendTextMessageAsync(
+                        e.Message.Chat.Id,
+                        response,
+                        ParseMode.Html,
+                        disableWebPagePreview: true);
+                }
+
+                lock (LastMsgIdsLock)
+                {
+                    LastMsgIds[m.Chat.Id] = m.MessageId;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Exception while repling to message #{MessageId} from {User} '{Text}'", e.Message.MessageId, e.Message.From.Username, e.Message.Text);
+                await Bot.SendTextMessageAsync(
+                    e.Message.Chat.Id,
+                    $"Простите, что-то я обосрался ({ex.Message})",
+                    ParseMode.Html,
+                    disableWebPagePreview: true);
+
+                lock (LastMsgIdsLock)
+                {
+                    LastMsgIds.Remove(e.Message.Chat.Id);
+                }
+            }
         }
 
         private static async void OnCallbackQuery(object sender, CallbackQueryEventArgs e)
@@ -128,26 +171,50 @@ namespace syphon_telegram
             Log.Information("OnCallbackQuery: {@CallbackQuery}", e.CallbackQuery);
             await Bot.AnswerCallbackQueryAsync(e.CallbackQuery.Id);
         }
-    }
 
-    internal sealed class BotHtmlResultRenderer : IResultRenderer
-    {
-        private readonly StringBuilder _builder = new StringBuilder();
-
-        public string Result => _builder.ToString().Replace("\n", "<br />");
-
-        public void AppendUnchanged(string str)
+        private static string Process(Message message)
         {
-            _builder.Append(str);
-        }
+            var inputText = message.Text;
 
-        public void AppendChanged(string str)
-        {
-            _builder.Append("<i>");
-            _builder.Append(str);
-            _builder.Append("</i>");
-        }
+            if (inputText == "/start")
+            {
+                Log.Information("Started new chat with {User}", message.MessageId, message.From.Username);
+                return "Привет, меня зовут Сифон и я <i>алкоголик</i> матершинник. Напиши мне что-нибудь, а я в ответ буду материться - это все, что мне под силу.";
+            }
 
-        public void End() { }
+            if (string.IsNullOrWhiteSpace(inputText))
+            {
+                Log.Warning("Empty message #{MessageId} from {User} '{Text}'", message.MessageId, message.From.Username, message.Text);
+                return "Скажи хоть что-нибудь";
+            }
+
+            ResultData result;
+            while (true)
+            {
+                result = Engine.Process(inputText);
+                if (result.PossibleChanges == 0)
+                {
+                    Log.Warning("Nothing to reply to message #{MessageId} from {User} '{Text}'", message.MessageId, message.From.Username, message.Text);
+                    return "Тут ловить нечего, давай посложнее чего!";
+                }
+
+                if (result.PerformedChanges > 0)
+                {
+                    break;
+                }
+            }
+
+            var renderer = new BotHtmlResultRenderer();
+            result.Render(renderer);
+            var outputText = renderer.Result;
+
+            if (string.IsNullOrWhiteSpace(outputText))
+            {
+                return "Эх, не вышло ничего у меня";
+            }
+
+            Log.Information("Replied to message #{MessageId} from {User} '{Text}'", message.MessageId, message.From.Username, message.Text);
+            return outputText;
+        }
     }
 }
